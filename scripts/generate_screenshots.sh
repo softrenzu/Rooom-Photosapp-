@@ -65,7 +65,7 @@ for locale in "${locales[@]}"; do
       -AppleLanguages "($language)" \
       -AppleLocale "$apple_locale"
     sleep 2
-    xcrun simctl io "$DEVICE_ID" screenshot --type=png "$output_dir/${index}_${screen}.png"
+    xcrun simctl io "$DEVICE_ID" screenshot --type=jpeg "$output_dir/${index}_${screen}.jpg"
     index=$((index + 1))
   done
 done
@@ -73,7 +73,7 @@ done
 xcrun simctl status_bar "$DEVICE_ID" clear || true
 
 accepted_dimensions='^(1260x2736|1290x2796|1320x2868)$'
-for screenshot in fastlane/screenshots/ja/*.png fastlane/screenshots/en-US/*.png; do
+for screenshot in fastlane/screenshots/ja/*.jpg fastlane/screenshots/en-US/*.jpg; do
   dimensions="$(sips -g pixelWidth -g pixelHeight "$screenshot" | awk '/pixelWidth/ {w=$2} /pixelHeight/ {h=$2} END {print w "x" h}')"
   alpha="$(sips -g hasAlpha "$screenshot" | awk '/hasAlpha/ {print $2}')"
   if [[ ! "$dimensions" =~ $accepted_dimensions ]]; then
@@ -87,4 +87,3 @@ for screenshot in fastlane/screenshots/ja/*.png fastlane/screenshots/en-US/*.png
 done
 
 echo "App Store screenshots generated and validated."
-

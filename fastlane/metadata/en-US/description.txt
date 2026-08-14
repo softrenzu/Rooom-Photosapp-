@@ -15,3 +15,11 @@ Photos travel directly from your iPhone to your Google Drive. They never pass th
 
 RooomShot is ideal for property photos, field work, inspections, construction records, inventory checks, and any workflow where capture and cloud storage should be one action.
 
+Monthly plan
+Photo capture and automatic Google Drive upload are available through a ¥500 monthly auto-renewable subscription. Payment is charged to your Apple Account at confirmation. The plan renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel in your App Store account settings.
+
+Terms of Use
+https://github.com/softrenzu/Rooom-Photosapp-/blob/main/TERMS.md
+
+Privacy Policy
+https://github.com/softrenzu/Rooom-Photosapp-/blob/main/PRIVACY.md

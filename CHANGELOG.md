@@ -6,6 +6,6 @@
 - Added direct Google Drive uploads with the least-privilege `drive.file` scope.
 - Added durable offline queue, reconnect retry, manual retry, and local upload history.
 - Added three photo-quality modes.
+- Added a ¥500 monthly StoreKit 2 subscription with on-device entitlement checks, purchase restoration, and subscription management.
 - Added Japanese and English localization.
 - Added privacy manifest, App Store metadata, screenshot automation, and signed release workflow.
-

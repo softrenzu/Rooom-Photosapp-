@@ -11,21 +11,95 @@ struct DemoShowcaseView: View {
         }
     }
 
+    @ViewBuilder
     var body: some View {
-        TabView(selection: .constant(selection)) {
-            DemoHomeScreen(isUploading: screen == "uploading")
-                .tag("home")
-                .tabItem { Label("tab.capture", systemImage: "camera.fill") }
+        if screen == "subscription" {
+            DemoSubscriptionScreen()
+        } else {
+            TabView(selection: .constant(selection)) {
+                DemoHomeScreen(isUploading: screen == "uploading")
+                    .tag("home")
+                    .tabItem { Label("tab.capture", systemImage: "camera.fill") }
 
-            DemoHistoryScreen()
-                .tag("history")
-                .tabItem { Label("tab.history", systemImage: "clock.arrow.circlepath") }
+                DemoHistoryScreen()
+                    .tag("history")
+                    .tabItem { Label("tab.history", systemImage: "clock.arrow.circlepath") }
 
-            DemoSettingsScreen()
-                .tag("settings")
-                .tabItem { Label("tab.settings", systemImage: "gearshape.fill") }
+                DemoSettingsScreen()
+                    .tag("settings")
+                    .tabItem { Label("tab.settings", systemImage: "gearshape.fill") }
+            }
+            .tint(.cyan)
         }
-        .tint(.cyan)
+    }
+}
+
+private struct DemoSubscriptionScreen: View {
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                BrandBackground()
+                ScrollView {
+                    VStack(spacing: 24) {
+                        Image(systemName: "icloud.and.arrow.up.fill")
+                            .font(.system(size: 58, weight: .semibold))
+                            .foregroundStyle(.white)
+                            .frame(width: 116, height: 116)
+                            .background(Color.accentColor.gradient, in: RoundedRectangle(cornerRadius: 28))
+                            .shadow(color: .cyan.opacity(0.35), radius: 24, y: 12)
+
+                        VStack(spacing: 8) {
+                            Text("subscription.title").font(.largeTitle.bold())
+                            Text("subscription.subtitle")
+                                .font(.title3)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.white.opacity(0.75))
+                        }
+
+                        GlassCard {
+                            VStack(alignment: .leading, spacing: 16) {
+                                feature("subscription.feature.upload", icon: "camera.fill")
+                                feature("subscription.feature.offline", icon: "arrow.triangle.2.circlepath")
+                                feature("subscription.feature.quality", icon: "photo.fill.on.rectangle.fill")
+                            }
+                        }
+
+                        Text(String(format: NSLocalizedString("subscription.priceFormat", comment: ""), SubscriptionPlan.fallbackMonthlyPrice))
+                            .font(.title2.bold())
+
+                        Text("subscription.purchase")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 15)
+                            .background(Color.accentColor, in: RoundedRectangle(cornerRadius: 15))
+
+                        Text("subscription.renewalDisclosure")
+                            .font(.caption)
+                            .foregroundStyle(.white.opacity(0.68))
+                            .multilineTextAlignment(.center)
+
+                        HStack(spacing: 20) {
+                            Text("link.terms")
+                            Text("link.privacy")
+                        }
+                        .font(.footnote)
+                    }
+                    .padding(22)
+                }
+            }
+            .foregroundStyle(.white)
+            .navigationTitle("subscription.navigationTitle")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+        }
+    }
+
+    private func feature(_ title: LocalizedStringKey, icon: String) -> some View {
+        Label {
+            Text(title).font(.headline)
+        } icon: {
+            Image(systemName: icon).foregroundStyle(.cyan).frame(width: 30)
+        }
     }
 }
 
@@ -150,6 +224,11 @@ private struct DemoSettingsScreen: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section("settings.subscription") {
+                    LabeledContent("settings.subscriptionStatus", value: NSLocalizedString("subscription.active", comment: ""))
+                    Label("subscription.manage", systemImage: "creditcard.fill")
+                    Label("subscription.restore", systemImage: "arrow.clockwise")
+                }
                 Section("settings.account") {
                     Label("photo@rooomtech.com", systemImage: "person.crop.circle.fill")
                 }
@@ -175,4 +254,3 @@ private struct DemoSettingsScreen: View {
         }
     }
 }
-

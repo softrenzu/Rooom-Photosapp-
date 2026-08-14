@@ -4,15 +4,47 @@ struct SettingsView: View {
     @EnvironmentObject private var auth: GoogleAuthService
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var uploads: UploadQueue
+    @EnvironmentObject private var subscriptions: SubscriptionManager
 
     @State private var showFolderSheet = false
     @State private var folderName = "RooomShot"
     @State private var isCreatingFolder = false
     @State private var folderError: String?
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
             Form {
+                Section("settings.subscription") {
+                    LabeledContent("settings.subscriptionStatus") {
+                        Text(LocalizedStringKey(subscriptions.isSubscribed
+                                                ? "subscription.active"
+                                                : "subscription.inactive"))
+                            .foregroundStyle(subscriptions.isSubscribed ? .green : .secondary)
+                    }
+
+                    if subscriptions.isSubscribed {
+                        Link(destination: SubscriptionPlan.manageSubscriptionsURL) {
+                            Label("subscription.manage", systemImage: "creditcard.fill")
+                        }
+                    } else {
+                        Button("subscription.showPlan", systemImage: "sparkles") {
+                            showPaywall = true
+                        }
+                    }
+
+                    Button("subscription.restore", systemImage: "arrow.clockwise") {
+                        Task { await subscriptions.restorePurchases() }
+                    }
+                    .disabled(subscriptions.isLoading)
+
+                    if let errorMessage = subscriptions.errorMessage {
+                        Text(errorMessage)
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
+                }
+
                 Section("settings.account") {
                     Label(auth.emailAddress ?? "—", systemImage: "person.crop.circle.fill")
                     Button("settings.signOut", role: .destructive) {
@@ -61,6 +93,10 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("settings.title")
+            .sheet(isPresented: $showPaywall) {
+                SubscriptionPaywallView()
+                    .environmentObject(subscriptions)
+            }
             .sheet(isPresented: $showFolderSheet) {
                 NavigationStack {
                     Form {

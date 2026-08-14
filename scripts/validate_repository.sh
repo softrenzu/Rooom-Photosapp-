@@ -10,7 +10,12 @@ required_files=(
   "RooomShot/Resources/PrivacyInfo.xcprivacy"
   "RooomShot/Resources/Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png"
   "RooomShot/App/RooomShotApp.swift"
+  "RooomShot/Services/SubscriptionManager.swift"
+  "RooomShot/Views/SubscriptionPaywallView.swift"
   "PRIVACY.md"
+  "TERMS.md"
+  "docs/terms.html"
+  "app_store_submission/SUBSCRIPTION_SETUP.md"
   "SUPPORT.md"
   "fastlane/metadata/ja/description.txt"
   "fastlane/metadata/en-US/description.txt"
@@ -57,10 +62,19 @@ if rg -n 'googleapis\.com/auth/drive[" ]' RooomShot --glob '*.swift'; then
   exit 1
 fi
 
+if ! rg -q 'com\.rooomtech\.rooomshot\.monthly' RooomShot/Models/SubscriptionPlan.swift app_store_submission/APP_STORE_VALUES.md; then
+  echo "The StoreKit product ID is missing or inconsistent." >&2
+  exit 1
+fi
+
+if ! rg -q 'TERMS\.md' fastlane/metadata/ja/description.txt fastlane/metadata/en-US/description.txt; then
+  echo "App Store descriptions must include the Terms of Use URL." >&2
+  exit 1
+fi
+
 if find . -type l | grep -q .; then
   echo "Symlinks are not allowed in the submission repository." >&2
   exit 1
 fi
 
 echo "Repository validation passed."
-

@@ -8,9 +8,13 @@ RooomShotは、iPhoneで写真を撮ると、指定した本人のGoogle Drive�
 - オフライン時の端末内キューと通信復帰後の再送
 - 失敗時の手動再試行、送信履歴
 - 3段階のJPEG画質設定
+- StoreKit 2による月額500円の自動更新サブスクリプション
+- 購入復元、解約状態の反映、App Storeの登録管理画面への導線
 - 日本語・英語対応
 - 広告、解析SDK、ROOOMTECHの中継サーバーなし
 - Google Drive全体ではなく、アプリが作成したファイルだけに使える `drive.file` 権限
+
+アプリのダウンロード、Google接続、保存先設定、履歴確認、設定画面は無料です。写真撮影とGoogle Driveへの自動アップロードは月額500円のプラン登録後に利用できます。解約後もGoogle Driveへ保存済みの写真は残ります。
 
 ## 対応環境
 
@@ -66,6 +70,8 @@ GitHub Actionsは以下を自動実行します。
 
 アカウント所有者にしか取得できない値は [REQUIRED_ACCOUNT_ACTIONS.md](app_store_submission/REQUIRED_ACCOUNT_ACTIONS.md) に分離しています。秘密鍵やパスワードをリポジトリへコミットしないでください。
 
+課金商品はApp Store Connectで作成します。商品IDは `com.rooomtech.rooomshot.monthly`、期間は1か月、日本価格は月額500円です。商品IDは作成後に変更できないため、ソースコードと完全一致させてください。初回の自動更新サブスクリプションはアプリ1.0.0と同じ審査へ追加します。登録手順は [SUBSCRIPTION_SETUP.md](app_store_submission/SUBSCRIPTION_SETUP.md) にあります。
+
 ## プライバシー
 
 詳細は [PRIVACY.md](PRIVACY.md) を参照してください。写真はiPhoneからGoogle Driveへ直接送られ、ROOOMTECHのサーバーを経由しません。
@@ -73,4 +79,3 @@ GitHub Actionsは以下を自動実行します。
 ## ライセンス
 
 ソースコードの非商用利用条件と商用ライセンスについては [LICENSE.md](LICENSE.md) を参照してください。商用・法人・本番利用は `support@rooomtech.com` までお問い合わせください。
-

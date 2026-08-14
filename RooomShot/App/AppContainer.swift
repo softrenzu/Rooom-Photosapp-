@@ -7,6 +7,7 @@ final class AppContainer: ObservableObject {
     let network: NetworkMonitor
     let drive: GoogleDriveAPI
     let uploads: UploadQueue
+    let subscriptions: SubscriptionManager
 
     init() {
         let settings = AppSettings()
@@ -18,7 +19,7 @@ final class AppContainer: ObservableObject {
         self.auth = auth
         self.network = network
         self.drive = drive
+        subscriptions = SubscriptionManager()
         uploads = UploadQueue(auth: auth, settings: settings, network: network, drive: drive)
     }
 }
-

@@ -25,6 +25,7 @@ Choose **Yes, data is collected** and declare only the following data types. Thi
 ## All other types
 
 - Declare as not collected.
+- Purchases: not collected by ROOOMTECH. Apple processes the transaction and StoreKit verifies entitlement on device; purchase history is not sent to a ROOOMTECH server.
 - Tracking: No.
 - Data broker sharing: No.
 - Third-party advertising: No.
@@ -35,8 +36,7 @@ Choose **Yes, data is collected** and declare only the following data types. Thi
 ## Privacy architecture evidence
 
 - No ROOOMTECH backend endpoint exists in the code.
-- Network destinations are Google Sign-In and `googleapis.com` only.
+- App-functionality network destinations are Google Sign-In, `googleapis.com`, and Apple's StoreKit services.
 - No advertising or analytics SDK is included.
 - Photos queued offline remain in Application Support and are deleted locally after upload succeeds.
 - `PrivacyInfo.xcprivacy` declares email address and photos/videos for app functionality and no tracking.
-

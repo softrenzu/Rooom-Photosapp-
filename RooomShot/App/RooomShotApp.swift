@@ -12,6 +12,7 @@ struct RooomShotApp: App {
                 .environmentObject(container.auth)
                 .environmentObject(container.network)
                 .environmentObject(container.uploads)
+                .environmentObject(container.subscriptions)
         }
     }
 }

@@ -1,2 +1,1 @@
-https://softrenzu.github.io/Rooom-Photosapp-/support.html
-
+https://github.com/softrenzu/Rooom-Photosapp-/issues

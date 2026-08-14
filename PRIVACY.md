@@ -44,26 +44,30 @@ ROOOMTECHは、利用者情報を販売せず、広告事業者へ提供しま�
 
 カメラ権限は、利用者が写真を撮影するときだけ使用します。位置情報、マイク、連絡先、写真ライブラリ全体へのアクセスは要求しません。
 
-## 8. 削除方法
+## 8. App Store課金
+
+月額プランの購入、請求、解約はAppleのApp Storeが処理します。RooomShotは有効な利用権の有無を端末上で確認しますが、ROOOMTECHのサーバーへ購入履歴や支払情報を送信・保存しません。
+
+## 9. 削除方法
 
 - Google Driveへアップロード済みの写真とフォルダは、利用者がGoogle Drive上で削除できます。
 - 端末内の送信履歴はアプリ内の「完了履歴を消去」から削除できます。
 - 送信待ち写真を含む端末内データは、アプリをiPhoneから削除することで消去できます。
 - Googleアカウントとの接続は、アプリの設定画面からログアウトして解除できます。Googleアカウントのセキュリティ設定からRooomShotのアクセス権を取り消すこともできます。
 
-## 9. 子どもの利用
+## 10. 子どもの利用
 
 本アプリは一般利用者向けの実用ツールであり、13歳未満の子どもを対象として情報を収集する設計ではありません。
 
-## 10. 安全管理
+## 11. 安全管理
 
 通信はHTTPSで暗号化し、Googleの短時間アクセストークンを使用します。アップロード先を必要最小限の権限に限定し、秘密情報をアプリのソースコードへ埋め込みません。
 
-## 11. 変更
+## 12. 変更
 
 本ポリシーを変更する場合、施行日と変更内容を本ページで告知します。重要な変更はアプリ内またはApp Storeの更新情報でも案内します。
 
-## 12. お問い合わせ
+## 13. お問い合わせ
 
 ROOOMTECH株式会社  
 メール: support@rooomtech.com  
@@ -83,5 +87,6 @@ RooomShot requests only the Google Drive `drive.file` scope. It does not read or
 
 The app contains no advertising, behavioral analytics, or tracking SDK. It does not request location, microphone, contacts, or full photo-library access. Users can delete uploaded content in Google Drive, clear completed history in the app, revoke Google access from their Google Account, and remove all queued local data by deleting the app.
 
-Contact: support@rooomtech.com
+Apple processes subscription purchases, billing, and cancellation. RooomShot checks entitlement status on device but does not send or store purchase history or payment information on a ROOOMTECH server.
 
+Contact: support@rooomtech.com

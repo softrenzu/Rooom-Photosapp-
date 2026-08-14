@@ -8,6 +8,7 @@ Updated: 2026-08-14
 - Google Sign-In and least-privilege `drive.file` integration
 - Resumable JPEG upload to an app-created destination folder
 - Offline queue, reconnect retry, manual retry, and local history
+- StoreKit 2 monthly subscription, entitlement checks, purchase restoration, and subscription management
 - Japanese and English localization
 - 1024 x 1024 opaque App Store icon
 - Privacy manifest and camera permission strings
@@ -23,6 +24,8 @@ These values cannot be fabricated or committed. They must be created in the acco
 
 - Apple Developer Team ID and active program membership
 - App Store Connect app record and final available app name
+- Active Paid Apps Agreement, banking information, and tax forms
+- App Store Connect subscription group and monthly product priced at ¥500
 - Apple Distribution certificate and matching private key
 - App Store provisioning profile for `com.rooomtech.rooomshot`
 - App Store Connect API key
@@ -31,4 +34,3 @@ These values cannot be fabricated or committed. They must be created in the acco
 - App Review contact phone number
 
 Exact entry locations and secret names are listed in `REQUIRED_ACCOUNT_ACTIONS.md`.
-

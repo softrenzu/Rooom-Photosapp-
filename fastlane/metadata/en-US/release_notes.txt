@@ -1,2 +1,1 @@
-Introducing RooomShot 1.0.0 with instant uploads, an offline queue, retries, upload history, and image-quality controls.
-
+Introducing RooomShot 1.0.0. The ¥500 monthly plan includes instant uploads, an offline queue, retries, upload history, and image-quality controls.

@@ -1,2 +1,1 @@
-https://softrenzu.github.io/Rooom-Photosapp-/privacy.html
-
+https://github.com/softrenzu/Rooom-Photosapp-/blob/main/PRIVACY.md

@@ -3,6 +3,7 @@ import SwiftUI
 struct RootView: View {
     @EnvironmentObject private var auth: GoogleAuthService
     @EnvironmentObject private var settings: AppSettings
+    @EnvironmentObject private var subscriptions: SubscriptionManager
 
     var body: some View {
         Group {
@@ -24,6 +25,7 @@ struct RootView: View {
             }
         }
         .preferredColorScheme(.dark)
+        .task { await subscriptions.prepare() }
     }
 }
 

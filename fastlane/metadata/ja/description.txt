@@ -15,3 +15,11 @@ RooomShotは、撮った写真をそのまま自分のGoogle Driveへアップ�
 
 物件写真、工事記録、現場報告、備品確認、日々の記録など、撮影とクラウド保存を一つの操作で終わらせたい場面に最適です。
 
+月額プラン
+写真撮影とGoogle Driveへの自動アップロードは月額500円の自動更新サブスクリプションで利用できます。購入確認時にApple Accountへ請求され、期間終了の24時間前までに解約しない限り自動更新されます。登録内容と解約はApp Storeのアカウント設定から管理できます。
+
+利用規約
+https://github.com/softrenzu/Rooom-Photosapp-/blob/main/TERMS.md
+
+プライバシーポリシー
+https://github.com/softrenzu/Rooom-Photosapp-/blob/main/PRIVACY.md

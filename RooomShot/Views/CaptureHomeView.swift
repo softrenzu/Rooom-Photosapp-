@@ -5,8 +5,10 @@ struct CaptureHomeView: View {
     @EnvironmentObject private var settings: AppSettings
     @EnvironmentObject private var network: NetworkMonitor
     @EnvironmentObject private var uploads: UploadQueue
+    @EnvironmentObject private var subscriptions: SubscriptionManager
 
     @State private var showCamera = false
+    @State private var showPaywall = false
     @State private var alertMessage: String?
     @State private var showSavedConfirmation = false
 
@@ -53,6 +55,10 @@ struct CaptureHomeView: View {
                 )
                 .ignoresSafeArea()
             }
+            .sheet(isPresented: $showPaywall) {
+                SubscriptionPaywallView()
+                    .environmentObject(subscriptions)
+            }
             .alert("alert.title", isPresented: Binding(
                 get: { alertMessage != nil },
                 set: { if !$0 { alertMessage = nil } }
@@ -94,6 +100,10 @@ struct CaptureHomeView: View {
 
     private var captureButton: some View {
         Button {
+            guard subscriptions.isSubscribed else {
+                showPaywall = true
+                return
+            }
             guard UIImagePickerController.isSourceTypeAvailable(.camera) else {
                 alertMessage = NSLocalizedString("error.cameraUnavailable", comment: "")
                 return
@@ -114,10 +124,20 @@ struct CaptureHomeView: View {
                 Image(systemName: "camera.fill")
                     .font(.system(size: 45, weight: .semibold))
                     .foregroundStyle(Color(red: 0.03, green: 0.24, blue: 0.7))
+                if !subscriptions.isSubscribed {
+                    Image(systemName: "lock.fill")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(width: 38, height: 38)
+                        .background(Color.accentColor, in: Circle())
+                        .offset(x: 62, y: 62)
+                }
             }
         }
         .buttonStyle(.plain)
-        .accessibilityLabel(Text("home.capture.accessibility"))
+        .accessibilityLabel(Text(LocalizedStringKey(subscriptions.isSubscribed
+                                                    ? "home.capture.accessibility"
+                                                    : "subscription.showPlan")))
         .accessibilityHint(Text("home.capture.hint"))
     }
 
@@ -125,7 +145,9 @@ struct CaptureHomeView: View {
         VStack(spacing: 6) {
             Text("home.capture")
                 .font(.title2.bold())
-            Text(network.isConnected ? "home.capture.onlineHint" : "home.capture.offlineHint")
+            Text(LocalizedStringKey(subscriptions.isSubscribed
+                                    ? (network.isConnected ? "home.capture.onlineHint" : "home.capture.offlineHint")
+                                    : "subscription.captureLockedHint"))
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.white.opacity(0.7))

@@ -8,6 +8,11 @@ on:
         required: true
         type: boolean
         default: false
+      subscription_review_ready:
+        description: Confirm the ¥500 monthly subscription is complete and added to this app review
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -108,6 +113,7 @@ jobs:
           APP_STORE_CONNECT_API_KEY_BASE64: ${{ secrets.APP_STORE_CONNECT_API_KEY_BASE64 }}
           IPA_PATH: build/export/RooomShot.ipa
           SUBMIT_FOR_REVIEW: ${{ inputs.submit_for_review }}
+          SUBSCRIPTION_REVIEW_READY: ${{ inputs.subscription_review_ready }}
         run: bundle exec fastlane ios submit
 
       - uses: actions/upload-artifact@v4

@@ -53,7 +53,7 @@ if [[ "$launch_storyboard" != "LaunchScreen" ]]; then
   exit 1
 fi
 
-screens=(home uploading history settings)
+screens=(home uploading history settings subscription)
 locales=(ja en-US)
 
 for locale in "${locales[@]}"; do

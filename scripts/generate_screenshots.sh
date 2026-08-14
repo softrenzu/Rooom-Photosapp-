@@ -40,7 +40,13 @@ if [[ ! -d "$APP_PATH" ]]; then
   exit 1
 fi
 
+xcrun simctl uninstall "$DEVICE_ID" com.rooomtech.rooomshot 2>/dev/null || true
 xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+
+echo "Built device family:"
+/usr/libexec/PlistBuddy -c "Print :UIDeviceFamily" "$APP_PATH/Info.plist"
+echo "Built launch storyboard:"
+/usr/libexec/PlistBuddy -c "Print :UILaunchStoryboardName" "$APP_PATH/Info.plist"
 
 screens=(home uploading history settings)
 locales=(ja en-US)

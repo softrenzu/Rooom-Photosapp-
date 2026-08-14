@@ -46,7 +46,12 @@ xcrun simctl install "$DEVICE_ID" "$APP_PATH"
 echo "Built device family:"
 /usr/libexec/PlistBuddy -c "Print :UIDeviceFamily" "$APP_PATH/Info.plist"
 echo "Built launch storyboard:"
-/usr/libexec/PlistBuddy -c "Print :UILaunchStoryboardName" "$APP_PATH/Info.plist"
+launch_storyboard="$(/usr/libexec/PlistBuddy -c "Print :UILaunchStoryboardName" "$APP_PATH/Info.plist")"
+echo "$launch_storyboard"
+if [[ "$launch_storyboard" != "LaunchScreen" ]]; then
+  echo "Launch storyboard is missing from the built app." >&2
+  exit 1
+fi
 
 screens=(home uploading history settings)
 locales=(ja en-US)

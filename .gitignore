@@ -1,0 +1,17 @@
+.DS_Store
+DerivedData/
+build/
+vendor/bundle/
+*.ipa
+*.xcarchive/
+*.mobileprovision
+*.p12
+AuthKey_*.p8
+*.xcuserstate
+xcuserdata/
+.swiftpm/
+Package.resolved
+Configuration/Secrets.xcconfig
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.html

@@ -1,0 +1,9 @@
+// Release archives must override both values in Secrets.xcconfig or CI settings.
+GOOGLE_CLIENT_ID = 000000000000-placeholder.apps.googleusercontent.com
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.000000000000-placeholder
+#include? "Secrets.xcconfig"
+
+SWIFT_COMPILATION_MODE = wholemodule
+SWIFT_OPTIMIZATION_LEVEL = -O
+CODE_SIGN_STYLE = Automatic
+

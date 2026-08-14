@@ -1,0 +1,2 @@
+Introducing RooomShot 1.0.0 with instant uploads, an offline queue, retries, upload history, and image-quality controls.
+

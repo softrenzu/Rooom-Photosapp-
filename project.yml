@@ -1,0 +1,83 @@
+name: RooomShot
+options:
+  minimumXcodeGenVersion: 2.44.1
+  deploymentTarget:
+    iOS: "17.0"
+  groupSortPosition: top
+  generateEmptyDirectories: false
+  createIntermediateGroups: true
+
+configs:
+  Debug: debug
+  Release: release
+
+configFiles:
+  Debug: Configuration/Debug.xcconfig
+  Release: Configuration/Release.xcconfig
+
+packages:
+  GoogleSignIn:
+    url: https://github.com/google/GoogleSignIn-iOS.git
+    from: 9.2.0
+
+settings:
+  base:
+    IPHONEOS_DEPLOYMENT_TARGET: 17.0
+    SWIFT_VERSION: 5.0
+    SWIFT_STRICT_CONCURRENCY: targeted
+    TARGETED_DEVICE_FAMILY: 1
+
+targets:
+  RooomShot:
+    type: application
+    platform: iOS
+    sources:
+      - path: RooomShot
+    info:
+      path: Configuration/Info.plist
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rooomtech.rooomshot
+        PRODUCT_NAME: RooomShot
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        CURRENT_PROJECT_VERSION: 1
+        MARKETING_VERSION: 1.0.0
+        ENABLE_PREVIEWS: YES
+        SUPPORTS_MACCATALYST: NO
+        GENERATE_INFOPLIST_FILE: NO
+    dependencies:
+      - package: GoogleSignIn
+        product: GoogleSignIn
+      - package: GoogleSignIn
+        product: GoogleSignInSwift
+    scheme:
+      testTargets:
+        - RooomShotTests
+        - RooomShotUITests
+      gatherCoverageData: true
+
+  RooomShotTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: RooomShotTests
+    dependencies:
+      - target: RooomShot
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rooomtech.rooomshot.tests
+        GENERATE_INFOPLIST_FILE: YES
+
+  RooomShotUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: RooomShotUITests
+    dependencies:
+      - target: RooomShot
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rooomtech.rooomshot.uitests
+        TEST_TARGET_NAME: RooomShot
+        GENERATE_INFOPLIST_FILE: YES

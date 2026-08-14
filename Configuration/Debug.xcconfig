@@ -1,0 +1,8 @@
+// Non-secret placeholders keep simulator and CI builds reproducible.
+GOOGLE_CLIENT_ID = 000000000000-placeholder.apps.googleusercontent.com
+GOOGLE_REVERSED_CLIENT_ID = com.googleusercontent.apps.000000000000-placeholder
+#include? "Secrets.xcconfig"
+
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG
+CODE_SIGN_STYLE = Automatic
+

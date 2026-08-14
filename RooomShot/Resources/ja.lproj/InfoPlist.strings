@@ -1,0 +1,3 @@
+"CFBundleDisplayName" = "RooomShot";
+"NSCameraUsageDescription" = "撮影した写真を、選択したGoogle Driveフォルダへアップロードするためにカメラを使用します。";
+

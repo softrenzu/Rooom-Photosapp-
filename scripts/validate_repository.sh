@@ -57,17 +57,33 @@ if ! diff -u "$ja_keys" "$en_keys"; then
   exit 1
 fi
 
-if rg -n 'googleapis\.com/auth/drive[" ]' RooomShot --glob '*.swift'; then
+if command -v rg >/dev/null 2>&1; then
+  broad_scope_matches="$(rg -n 'googleapis\.com/auth/drive[" ]' RooomShot --glob '*.swift' || true)"
+else
+  broad_scope_matches="$(grep -R -n -E 'googleapis\.com/auth/drive[" ]' RooomShot --include='*.swift' || true)"
+fi
+if [[ -n "$broad_scope_matches" ]]; then
+  echo "$broad_scope_matches"
   echo "Broad Google Drive scope found. Use drive.file only." >&2
   exit 1
 fi
 
-if ! rg -q 'com\.rooomtech\.rooomshot\.monthly' RooomShot/Models/SubscriptionPlan.swift app_store_submission/APP_STORE_VALUES.md; then
+if command -v rg >/dev/null 2>&1; then
+  product_id_found="$(rg -l 'com\.rooomtech\.rooomshot\.monthly' RooomShot/Models/SubscriptionPlan.swift app_store_submission/APP_STORE_VALUES.md | wc -l | tr -d ' ')"
+else
+  product_id_found="$(grep -l -E 'com\.rooomtech\.rooomshot\.monthly' RooomShot/Models/SubscriptionPlan.swift app_store_submission/APP_STORE_VALUES.md | wc -l | tr -d ' ')"
+fi
+if [[ "$product_id_found" != "2" ]]; then
   echo "The StoreKit product ID is missing or inconsistent." >&2
   exit 1
 fi
 
-if ! rg -q 'TERMS\.md' fastlane/metadata/ja/description.txt fastlane/metadata/en-US/description.txt; then
+if command -v rg >/dev/null 2>&1; then
+  terms_url_found="$(rg -l 'TERMS\.md' fastlane/metadata/ja/description.txt fastlane/metadata/en-US/description.txt | wc -l | tr -d ' ')"
+else
+  terms_url_found="$(grep -l -E 'TERMS\.md' fastlane/metadata/ja/description.txt fastlane/metadata/en-US/description.txt | wc -l | tr -d ' ')"
+fi
+if [[ "$terms_url_found" != "2" ]]; then
   echo "App Store descriptions must include the Terms of Use URL." >&2
   exit 1
 fi

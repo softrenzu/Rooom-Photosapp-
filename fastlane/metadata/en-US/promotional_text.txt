@@ -1,2 +1,1 @@
-Take the shot and move on. RooomShot sends it straight to your Google Drive.
-
+Shoot once: upload to Drive, recognize text on-device, and keep a searchable JSON index automatically.

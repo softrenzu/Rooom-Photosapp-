@@ -77,7 +77,9 @@ final class UploadQueue: ObservableObject {
         let item = UploadItem(
             id: identifier,
             fileName: fileName,
-            localFileName: fileName
+            localFileName: fileName,
+            pixelWidth: Int((image.size.width * image.scale).rounded()),
+            pixelHeight: Int((image.size.height * image.scale).rounded())
         )
         items.insert(item, at: 0)
         trimHistory()
@@ -147,14 +149,45 @@ final class UploadQueue: ObservableObject {
                 let localURL = storageDirectory.appendingPathComponent(localFileName)
                 do {
                     let data = try Data(contentsOf: localURL)
-                    let remote = try await drive.uploadJPEG(
-                        data,
-                        fileName: items[index].fileName,
-                        folderID: destinationID
-                    )
+
+                    if items[index].remoteFileID == nil {
+                        let remote = try await drive.uploadJPEG(
+                            data,
+                            fileName: items[index].fileName,
+                            folderID: destinationID
+                        )
+                        items[index].remoteFileID = remote.id
+                        items[index].remoteWebViewLink = remote.webViewLink
+                        persist()
+                    }
+
+                    guard let remoteFileID = items[index].remoteFileID else {
+                        throw GoogleDriveAPI.APIError.invalidResponse
+                    }
+
+                    if items[index].indexRecorded != true {
+                        let recognizedLines = (try? await Task.detached(priority: .utility) {
+                            try TextRecognitionService.recognizeText(in: data)
+                        }.value) ?? []
+
+                        let entry = PhotoSearchIndexEntry(
+                            id: items[index].id,
+                            capturedAt: items[index].createdAt,
+                            fileName: items[index].fileName,
+                            driveFileID: remoteFileID,
+                            driveWebViewLink: items[index].remoteWebViewLink,
+                            folderID: destinationID,
+                            pixelWidth: items[index].pixelWidth,
+                            pixelHeight: items[index].pixelHeight,
+                            ocrText: recognizedLines.joined(separator: "\n")
+                        )
+                        try await drive.upsertSearchIndex(entry: entry, folderID: destinationID)
+                        items[index].indexRecorded = true
+                        persist()
+                    }
+
                     try? fileManager.removeItem(at: localURL)
                     items[index].status = .uploaded
-                    items[index].remoteFileID = remote.id
                     items[index].localFileName = nil
                     items[index].errorMessage = nil
                 } catch {

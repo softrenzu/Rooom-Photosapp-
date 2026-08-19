@@ -15,6 +15,10 @@ struct UploadItem: Codable, Identifiable, Equatable {
     var status: Status
     var attemptCount: Int
     var remoteFileID: String?
+    var remoteWebViewLink: String?
+    var pixelWidth: Int?
+    var pixelHeight: Int?
+    var indexRecorded: Bool?
     var errorMessage: String?
 
     init(
@@ -25,6 +29,10 @@ struct UploadItem: Codable, Identifiable, Equatable {
         status: Status = .queued,
         attemptCount: Int = 0,
         remoteFileID: String? = nil,
+        remoteWebViewLink: String? = nil,
+        pixelWidth: Int? = nil,
+        pixelHeight: Int? = nil,
+        indexRecorded: Bool? = nil,
         errorMessage: String? = nil
     ) {
         self.id = id
@@ -34,6 +42,10 @@ struct UploadItem: Codable, Identifiable, Equatable {
         self.status = status
         self.attemptCount = attemptCount
         self.remoteFileID = remoteFileID
+        self.remoteWebViewLink = remoteWebViewLink
+        self.pixelWidth = pixelWidth
+        self.pixelHeight = pixelHeight
+        self.indexRecorded = indexRecorded
         self.errorMessage = errorMessage
     }
 }

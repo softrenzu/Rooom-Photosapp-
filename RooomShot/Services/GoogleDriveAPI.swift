@@ -225,6 +225,7 @@ actor GoogleDriveAPI {
         components.queryItems = [
             URLQueryItem(name: "uploadType", value: "multipart"),
             URLQueryItem(name: "supportsAllDrives", value: "true"),
+            URLQueryItem(name: "useContentAsIndexableText", value: "true"),
             URLQueryItem(name: "fields", value: "id,name,mimeType,webViewLink")
         ]
         guard let url = components.url else { throw APIError.invalidURL }
@@ -265,6 +266,7 @@ actor GoogleDriveAPI {
         components.queryItems = [
             URLQueryItem(name: "uploadType", value: "media"),
             URLQueryItem(name: "supportsAllDrives", value: "true"),
+            URLQueryItem(name: "useContentAsIndexableText", value: "true"),
             URLQueryItem(name: "fields", value: "id,name,mimeType,webViewLink")
         ]
         guard let url = components.url else { throw APIError.invalidURL }

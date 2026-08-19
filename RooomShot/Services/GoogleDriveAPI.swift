@@ -51,6 +51,16 @@ actor GoogleDriveAPI {
         let mimeType = "image/jpeg"
     }
 
+    private struct TextFileMetadata: Encodable {
+        let name: String
+        let parents: [String]
+        let mimeType: String
+    }
+
+    private struct FileListResponse: Decodable {
+        let files: [DriveFile]
+    }
+
     private struct GoogleErrorEnvelope: Decodable {
         struct GoogleError: Decodable {
             let message: String
@@ -140,6 +150,142 @@ actor GoogleDriveAPI {
         return try decoder.decode(DriveFile.self, from: responseData)
     }
 
+    func upsertSearchIndex(entry: PhotoSearchIndexEntry, folderID: String) async throws {
+        if let existing = try await file(named: PhotoSearchIndex.fileName, in: folderID) {
+            let existingData = try await downloadFile(id: existing.id)
+            var index = try PhotoSearchIndex.decode(from: existingData)
+            index.upsert(entry)
+            _ = try await updateTextFile(
+                try index.encoded(),
+                fileID: existing.id,
+                mimeType: "application/json"
+            )
+        } else {
+            var index = PhotoSearchIndex()
+            index.upsert(entry)
+            _ = try await createTextFile(
+                try index.encoded(),
+                fileName: PhotoSearchIndex.fileName,
+                folderID: folderID,
+                mimeType: "application/json"
+            )
+        }
+    }
+
+    private func file(named name: String, in folderID: String) async throws -> DriveFile? {
+        let token = try await auth.validAccessToken()
+        guard var components = URLComponents(string: "https://www.googleapis.com/drive/v3/files") else {
+            throw APIError.invalidURL
+        }
+
+        let escapedName = escapeDriveQueryValue(name)
+        let escapedFolderID = escapeDriveQueryValue(folderID)
+        components.queryItems = [
+            URLQueryItem(name: "q", value: "'\(escapedFolderID)' in parents and name = '\(escapedName)' and trashed = false"),
+            URLQueryItem(name: "spaces", value: "drive"),
+            URLQueryItem(name: "pageSize", value: "1"),
+            URLQueryItem(name: "supportsAllDrives", value: "true"),
+            URLQueryItem(name: "includeItemsFromAllDrives", value: "true"),
+            URLQueryItem(name: "fields", value: "files(id,name,mimeType,webViewLink)")
+        ]
+        guard let url = components.url else { throw APIError.invalidURL }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        let data = try await perform(request)
+        return try decoder.decode(FileListResponse.self, from: data).files.first
+    }
+
+    private func downloadFile(id: String) async throws -> Data {
+        let token = try await auth.validAccessToken()
+        guard var components = URLComponents(string: "https://www.googleapis.com/drive/v3/files/\(id)") else {
+            throw APIError.invalidURL
+        }
+        components.queryItems = [
+            URLQueryItem(name: "alt", value: "media"),
+            URLQueryItem(name: "supportsAllDrives", value: "true")
+        ]
+        guard let url = components.url else { throw APIError.invalidURL }
+
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return try await perform(request)
+    }
+
+    private func createTextFile(
+        _ data: Data,
+        fileName: String,
+        folderID: String,
+        mimeType: String
+    ) async throws -> DriveFile {
+        let token = try await auth.validAccessToken()
+        guard var components = URLComponents(string: "https://www.googleapis.com/upload/drive/v3/files") else {
+            throw APIError.invalidURL
+        }
+        components.queryItems = [
+            URLQueryItem(name: "uploadType", value: "multipart"),
+            URLQueryItem(name: "supportsAllDrives", value: "true"),
+            URLQueryItem(name: "fields", value: "id,name,mimeType,webViewLink")
+        ]
+        guard let url = components.url else { throw APIError.invalidURL }
+
+        let boundary = "RooomShot-\(UUID().uuidString)"
+        let metadata = try encoder.encode(
+            TextFileMetadata(name: fileName, parents: [folderID], mimeType: mimeType)
+        )
+        var body = Data()
+        body.append(Data("--\(boundary)\r\n".utf8))
+        body.append(Data("Content-Type: application/json; charset=utf-8\r\n\r\n".utf8))
+        body.append(metadata)
+        body.append(Data("\r\n--\(boundary)\r\n".utf8))
+        body.append(Data("Content-Type: \(mimeType)\r\n\r\n".utf8))
+        body.append(data)
+        body.append(Data("\r\n--\(boundary)--\r\n".utf8))
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("multipart/related; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+
+        let responseData = try await perform(request)
+        return try decoder.decode(DriveFile.self, from: responseData)
+    }
+
+    private func updateTextFile(
+        _ data: Data,
+        fileID: String,
+        mimeType: String
+    ) async throws -> DriveFile {
+        let token = try await auth.validAccessToken()
+        guard var components = URLComponents(string: "https://www.googleapis.com/upload/drive/v3/files/\(fileID)") else {
+            throw APIError.invalidURL
+        }
+        components.queryItems = [
+            URLQueryItem(name: "uploadType", value: "media"),
+            URLQueryItem(name: "supportsAllDrives", value: "true"),
+            URLQueryItem(name: "fields", value: "id,name,mimeType,webViewLink")
+        ]
+        guard let url = components.url else { throw APIError.invalidURL }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PATCH"
+        request.timeoutInterval = 60
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue(mimeType, forHTTPHeaderField: "Content-Type")
+
+        let (responseData, response) = try await session.upload(for: request, from: data)
+        _ = try validate(response, data: responseData)
+        return try decoder.decode(DriveFile.self, from: responseData)
+    }
+
+    private func escapeDriveQueryValue(_ value: String) -> String {
+        value
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "'", with: "\\'")
+    }
+
     private func perform(_ request: URLRequest) async throws -> Data {
         let (data, response) = try await session.data(for: request)
         _ = try validate(response, data: data)
@@ -160,4 +306,3 @@ actor GoogleDriveAPI {
         return response
     }
 }
-

@@ -1,22 +1,30 @@
-RooomShot is a focused camera app that sends every photo you take straight to your own Google Drive.
+RooomShot is a focused camera app that sends every photo you take straight to your own Google Drive and organizes text found in the image into a searchable JSON index.
 
-There is no share sheet and no destination to select after every shot. Connect your Google Account, create a destination folder once, and use the large camera button whenever you need to capture something.
+There is no share sheet and no destination to select after every shot. Connect your Google Account, create a destination folder once, and use the camera button whenever you need to capture something.
 
 Key features
 • Automatic Google Drive upload immediately after capture
+• On-device OCR for text visible in captured photos
+• Automatic `RooomShot_index.json` creation in the destination folder
+• Existing JSON index is updated with each photo instead of recreated
+• Records file name, capture time, image dimensions, Drive file ID, and OCR text
+• Prevents duplicate index records by Drive file ID when retrying
 • Safe on-device queue while offline
 • Automatic retry when connectivity returns, plus manual retry
 • Maximum, high-quality, and space-saving image options
 • Clear queued, uploading, completed, and failed history
 • Japanese and English interface
 
-Privacy by design
-Photos travel directly from your iPhone to your Google Drive. They never pass through a ROOOMTECH server. RooomShot requests only the Google Drive permission needed to manage files and folders it creates. It does not request access to read your entire Drive and includes no advertising trackers.
+Search-friendly photo records
+The JSON index makes it easier to process and search information such as property names, room numbers, equipment labels, invoice numbers, and other text visible in photos. OCR is performed on the iPhone using Apple Vision.
 
-RooomShot is ideal for property photos, field work, inspections, construction records, inventory checks, and any workflow where capture and cloud storage should be one action.
+Privacy by design
+Photos and the JSON index travel directly from your iPhone to your own Google Drive. They never pass through a ROOOMTECH server or an external AI service. RooomShot requests only the Google Drive permission needed to manage files and folders it creates. It does not request access to read your entire Drive and includes no advertising trackers.
+
+RooomShot is useful for property photos, inspections, construction records, field reports, inventory checks, cleaning records, and workflows where capture, cloud storage, and searchable metadata should be one action.
 
 Monthly plan
-Photo capture and automatic Google Drive upload are available through a ¥500 monthly auto-renewable subscription. Payment is charged to your Apple Account at confirmation. The plan renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel in your App Store account settings.
+Photo capture, automatic Google Drive upload, OCR, and JSON index creation are available through a ¥500 monthly auto-renewable subscription. Payment is charged to your Apple Account at confirmation. The plan renews automatically unless canceled at least 24 hours before the end of the current period. Manage or cancel in your App Store account settings.
 
 Terms of Use
 https://github.com/softrenzu/Rooom-Photosapp-/blob/main/TERMS.md

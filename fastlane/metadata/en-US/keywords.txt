@@ -1,2 +1,1 @@
-photo,camera,Google Drive,cloud,upload,field work,inspection,property,construction,records
-
+photo,camera,Google Drive,OCR,JSON,cloud,upload,inspection,property,construction,records

@@ -5,13 +5,10 @@
 	<key>method</key>
 	<string>app-store-connect</string>
 	<key>signingStyle</key>
-	<string>manual</string>
+	<string>automatic</string>
 	<key>teamID</key>
 	<string>REPLACE_WITH_APPLE_TEAM_ID</string>
-	<key>provisioningProfiles</key>
-	<dict/>
 	<key>uploadSymbols</key>
 	<true/>
 </dict>
 </plist>
-

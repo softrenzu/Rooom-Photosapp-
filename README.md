@@ -1,11 +1,16 @@
 # RooomShot for iPhone
 
-RooomShotは、iPhoneで写真を撮ると、指定した本人のGoogle Driveフォルダへ自動アップロードするSwiftUIアプリです。
+RooomShotは、iPhoneで写真を撮ると、指定した本人のGoogle Driveフォルダへ自動アップロードし、写真内の文字を端末上でOCRして検索用JSONへ整理するSwiftUIアプリです。
 
 ## 主な機能
 
 - 撮影直後のGoogle Drive自動アップロード
+- Apple Visionによる日本語・英語のオンデバイスOCR
+- 保存先フォルダに `RooomShot_index.json` を自動作成
+- JSONが既にある場合はDriveファイルID単位で写真情報を追加・更新
+- JSONにはファイル名、撮影時刻、画像サイズ、DriveファイルID、OCRテキスト、検索用文字列を保存
 - オフライン時の端末内キューと通信復帰後の再送
+- 写真アップロード後にJSON更新だけ失敗した場合、写真を二重アップロードせずJSON更新のみ再試行
 - 失敗時の手動再試行、送信履歴
 - 3段階のJPEG画質設定
 - StoreKit 2による月額500円の自動更新サブスクリプション
@@ -14,7 +19,38 @@ RooomShotは、iPhoneで写真を撮ると、指定した本人のGoogle Drive�
 - 広告、解析SDK、ROOOMTECHの中継サーバーなし
 - Google Drive全体ではなく、アプリが作成したファイルだけに使える `drive.file` 権限
 
-アプリのダウンロード、Google接続、保存先設定、履歴確認、設定画面は無料です。写真撮影とGoogle Driveへの自動アップロードは月額500円のプラン登録後に利用できます。解約後もGoogle Driveへ保存済みの写真は残ります。
+アプリのダウンロード、Google接続、保存先設定、履歴確認、設定画面は無料です。写真撮影、Google Driveへの自動アップロード、OCR、検索用JSONインデックス作成は月額500円のプラン登録後に利用できます。解約後もGoogle Driveへ保存済みの写真とJSONは残ります。
+
+## 検索用JSON
+
+保存先フォルダには `RooomShot_index.json` が1つ作成されます。写真を追加するたびに同じJSONを読み込み、DriveファイルIDをキーとして追加または更新します。
+
+例:
+
+```json
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-20T00:00:00Z",
+  "items": [
+    {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "capturedAt": "2026-08-20T00:00:00Z",
+      "uploadedAt": "2026-08-20T00:00:03Z",
+      "fileName": "RooomShot_20260820_090000_000000.jpg",
+      "driveFileID": "...",
+      "driveWebViewLink": "...",
+      "mimeType": "image/jpeg",
+      "folderID": "...",
+      "pixelWidth": 3024,
+      "pixelHeight": 4032,
+      "ocrText": "物件名 Rooom House\n101号室",
+      "searchText": "RooomShot_20260820_090000_000000.jpg\n物件名 Rooom House\n101号室"
+    }
+  ]
+}
+```
+
+OCRはApple Visionを使ってiPhone上で実行し、認識のために写真をROOOMTECHのサーバーや外部AIサービスへ送りません。
 
 ## 対応環境
 
@@ -74,7 +110,7 @@ GitHub Actionsは以下を自動実行します。
 
 ## プライバシー
 
-詳細は [PRIVACY.md](PRIVACY.md) を参照してください。写真はiPhoneからGoogle Driveへ直接送られ、ROOOMTECHのサーバーを経由しません。
+詳細は [PRIVACY.md](PRIVACY.md) を参照してください。写真と検索用JSONはiPhoneから本人のGoogle Driveへ直接送られ、ROOOMTECHのサーバーを経由しません。
 
 ## ライセンス
 

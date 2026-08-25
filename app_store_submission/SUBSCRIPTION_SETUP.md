@@ -52,21 +52,22 @@ Official references:
 Japanese:
 
 - Display name: `月額プラン`
-- Description: `写真の撮影とGoogle Driveへの自動アップロードを無制限で利用できます。`
+- Description: `写真撮影、Google Drive自動保存、OCR、検索用JSON整理を無制限で利用できます。`
 
 English:
 
 - Display name: `Monthly Plan`
-- Description: `Unlimited photo capture and automatic uploads to your Google Drive.`
+- Description: `Unlimited capture, Google Drive upload, on-device OCR, and searchable JSON indexing.`
 
 Upload `fastlane/screenshots/ja/5_subscription.jpg` as the review screenshot after the screenshot workflow succeeds. Review notes are in `REVIEW_NOTES.md`.
 
 ## 5. Test and submit
 
 1. Test purchase, renewal, cancellation, expiration, and restoration in Apple's sandbox or TestFlight.
-2. Confirm an active purchase unlocks the camera.
-3. Confirm expiration or revocation locks new capture without deleting history or Google Drive content.
-4. On the subscription detail page, select **Add for Review**.
-5. Add the subscription to the same App Review submission as RooomShot 1.0.0.
+2. Confirm an active purchase unlocks the camera, Drive upload, OCR, and JSON indexing.
+3. Confirm a captured photo creates or updates `RooomShot_index.json` in the same Drive folder.
+4. Confirm expiration or revocation locks new capture without deleting history or Google Drive content.
+5. On the subscription detail page, select **Add for Review**.
+6. Add the subscription to the same App Review submission as RooomShot 1.0.0.
 
 The first auto-renewable subscription must be submitted with a new app version. Do not run the release workflow with `submit_for_review=true` until the subscription is complete and attached to the version.

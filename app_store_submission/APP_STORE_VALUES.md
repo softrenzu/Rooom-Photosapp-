@@ -37,9 +37,9 @@
 | Family Sharing | Off |
 | Availability | All App Store countries and regions |
 | Japanese display name | 月額プラン |
-| Japanese description | 写真の撮影とGoogle Driveへの自動アップロードを無制限で利用できます。 |
+| Japanese description | 写真撮影、Google Drive自動保存、OCR、検索用JSON整理を無制限で利用できます。 |
 | English display name | Monthly Plan |
-| English description | Unlimited photo capture and automatic uploads to your Google Drive. |
+| English description | Unlimited capture, Google Drive upload, on-device OCR, and searchable JSON indexing. |
 | Review screenshot | Japanese `5_subscription.jpg` |
 
 The product ID is permanent and must be entered exactly as shown. The first subscription must be submitted for review together with app version 1.0.0.

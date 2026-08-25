@@ -39,22 +39,23 @@ Create protected environment `app-store-production` and add only these secrets:
 
 | Secret | Contents |
 |---|---|
-| `APPLE_TEAM_ID` | `FP4P58VA5F` |
 | `GOOGLE_CLIENT_ID` | Google iOS OAuth client ID |
 | `GOOGLE_REVERSED_CLIENT_ID` | Reversed Google iOS OAuth client ID |
 | `APP_STORE_CONNECT_KEY_ID` | Team App Store Connect API key ID |
 | `APP_STORE_CONNECT_ISSUER_ID` | App Store Connect issuer ID |
-| `APP_STORE_CONNECT_API_KEY_BASE64` | Base64 of the downloaded `AuthKey_*.p8` file |
+| `APP_STORE_CONNECT_API_KEY` | Exact contents of the downloaded `AuthKey_*.p8` private-key file, including BEGIN/END PRIVATE KEY lines |
 
-Require manual approval for this environment. Never paste the API private key or Google credentials into issues, source files, chat messages, build logs, or App Review notes.
+`APPLE_TEAM_ID` is not secret and is fixed in the release workflow as `FP4P58VA5F`.
+
+Require manual approval for this environment. Never paste the API private key or Google credentials into issues, source files, chat messages, build logs, or App Review notes. Enter the private key directly into the protected GitHub secret field.
 
 ## Release order
 
-1. Merge the validated production changes to `main`.
-2. Populate the GitHub environment secrets above.
-3. Run **Signed TestFlight and App Store Release** with `submit_for_review=false` and `subscription_review_ready=false` to build, cloud-sign, upload the IPA, metadata, and screenshots without submitting the app.
-4. Verify the processed build in App Store Connect/TestFlight and test the production candidate.
-5. Finish the ¥500 subscription and add the subscription + group to the same App Review submission as RooomShot 1.0.0.
-6. Complete privacy, age rating, availability, review contact, content rights, and other required App Store fields.
-7. Run the release workflow with `submit_for_review=true` and `subscription_review_ready=true`, or use App Store Connect to add the uploaded build and subscription to the draft submission and click **Submit for Review**.
+1. Populate the GitHub environment secrets above.
+2. Run **Signed TestFlight and App Store Release** on `agent/drive-json-index` with `submit_for_review=false` and `subscription_review_ready=false` to build, cloud-sign, upload the IPA, metadata, and screenshots without submitting the app.
+3. Verify the processed build in App Store Connect/TestFlight and test the production candidate.
+4. Finish the ¥500 subscription and add the subscription + group to the same App Review submission as RooomShot 1.0.0.
+5. Complete privacy, age rating, availability, review contact, content rights, and other required App Store fields.
+6. When the candidate is validated, merge the production changes to `main`.
+7. Submit from App Store Connect, or run the release workflow with `submit_for_review=true` and `subscription_review_ready=true` after all submission metadata is complete.
 8. After Apple approval, release manually from App Store Connect.

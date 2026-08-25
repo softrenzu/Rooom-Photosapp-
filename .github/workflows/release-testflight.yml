@@ -13,6 +13,11 @@ on:
         required: true
         type: boolean
         default: false
+  push:
+    branches:
+      - agent/drive-json-index
+    paths:
+      - .github/release-trigger.txt
 
 permissions:
   contents: read
